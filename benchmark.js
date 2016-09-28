@@ -47,34 +47,40 @@ runBenchmark(basicBenchmark)
 
 
 
-// const usingSharedVarsExampleBenchmark = {
-//   name: 'Sum methods basic (using shared vars)',
-//   iterations: 5,
-//   unitRepeat: 1,
-//   functions: [
-//     (each) => {
-//       for (var i = 0; i < 1000000; i++) {
-//         each.subject.push(i)
-//       }
-//     },
-//     (each) => {
-//       Array(1000000).forEach(
-//         (el, index) => each.subject.push(index)
-//       )
-//     },
-//     (each) => {
-//       each.subject = Array(1000000).fill(1).map(
-//         (el, index) => index
-//       )
-//     }
-//   ],
-//   beforeEach: () => {
-//     return {
-//       subject: []
-//     }
-//   }
-// }
-// runBenchmark(usingSharedVarsExampleBenchmark)
+const usingSharedVarsExampleBenchmark = {
+  name: 'Sum methods basic (using shared vars)',
+  iterations: 5,
+  unitRepeat: 1,
+  functions: [
+    (each) => {
+      for (var i = 0; i < each.subject.length; i++) {
+        each.subject[i] = i
+      }
+    },
+    (each) => {
+      each.subject.forEach(
+        (el, index) => each.subject[index] = index
+      )
+    },
+    (each) => {
+      each.subject = each.subject.map(
+        (el, index) => index
+      )
+    },
+    (each) => {
+      each.subject = each.subject.reduce(
+        (acc, el, index) => { acc[index] = index ; return acc },
+        []
+      )
+    }
+  ],
+  beforeEach: () => {
+    return {
+      subject: makeArray(1000000)
+    }
+  }
+}
+runBenchmark(usingSharedVarsExampleBenchmark)
 //
 //
 //
