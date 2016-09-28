@@ -1,8 +1,8 @@
 'use strict'
 
-const repeat = (n, func) => {
+const repeat = (n, func) =>
   Array(n).fill(1).forEach((el, index) => func(index))
-}
+
 
 const runBenchmark = (benchmark) => {
   benchmark.before()
@@ -32,17 +32,3 @@ const exampleBenchmark = {
 }
 
 runBenchmark(exampleBenchmark)
-
-
-
-
-
-
-
-
-//
-//
-//
-// getAttribute()
-// hasAttribute()
-// removeAttribute()
