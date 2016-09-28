@@ -25,7 +25,6 @@ const exampleBenchmark = {
     () =>  document.querySelectorAll("p")[0].getAttribute("test")
   ],
   before: () => {
-    document.createElement('p')
     document.querySelectorAll("p")[0].setAttribute("test", "blabla")
   }
 }
