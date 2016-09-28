@@ -5,27 +5,72 @@ const repeat = (n, func) =>
 
 
 const runBenchmark = (benchmark) => {
-  benchmark.before()
+  const sharedAll = benchmark.beforeAll && benchmark.beforeAll() || {}
   repeat(benchmark.iterations, (iteration) => {
     console.log("----  " + benchmark.name + ": iteration " + iteration + "  ----")
     benchmark.functions.forEach((func, index) => {
-      console.time(iteration + " " + index)
-      repeat(benchmark.unitRepeat, func)
-      console.timeEnd(iteration + " " + index)
+      const sharedEach = benchmark.beforeEach && benchmark.beforeEach() || {}
+      console.time(index)
+      repeat(benchmark.unitRepeat, () => func(sharedAll, sharedEach))
+      console.timeEnd(index)
     })
   })
 }
 
-const exampleBenchmark = {
-  name: 'DOM getAttribute',
-  iterations: 10,
-  unitRepeat: 1000000,
+const exampleBasicBenchmark = {
+  name: 'Sum methods basic',
+  iterations: 5,
+  unitRepeat: 1,
   functions: [
-    () => document.querySelectorAll("p")[0].attributes.test.value,
-    () =>  document.querySelectorAll("p")[0].getAttribute("test")
+    () => {
+      const subject = []
+      for (var i = 0; i < 1000000; i++) {
+        subject.push(i)
+      }
+    },
+    () => {
+      const subject = []
+      Array(1000000).forEach(
+        (el, index) => subject.push(index)
+      )
+    },
+    () => {
+      const subject = Array(1000000).fill(1).map(
+        (el, index) => index
+      )
+    }
+  ]
+}
+
+runBenchmark(exampleBasicBenchmark)
+
+const exampleBenchmark = {
+  name: 'Sum methods',
+  iterations: 5,
+  unitRepeat: 5000000,
+  functions: [
+    (all, each) => {
+      all.aGlobal = all.aGlobal + 1
+    },
+    (all, each) => {
+      all.aGlobal += 1
+    },
+    (all, each) => {
+      each.aPrivate = each.aPrivate + 1
+    },
+    (all, each) => {
+      each.aPrivate += 1
+    }
   ],
-  before: () => {
-    document.querySelectorAll("p")[0].setAttribute("test", "blabla")
+  beforeAll: () => {
+    return {
+      aGlobal: 1
+    }
+  },
+  beforeEach: () => {
+    return {
+      aPrivate: 1
+    }
   }
 }
 
