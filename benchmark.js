@@ -5,19 +5,19 @@ const repeat = (n, func) =>
 
 
 const runBenchmark = (benchmark) => {
-  const sharedAll = benchmark.beforeAll && benchmark.beforeAll() || {}
   repeat(benchmark.iterations, (iteration) => {
+    const sharedAll = benchmark.beforeAll && benchmark.beforeAll() || {}
     console.log("----  " + benchmark.name + ": iteration " + iteration + "  ----")
     benchmark.functions.forEach((func, index) => {
       const sharedEach = benchmark.beforeEach && benchmark.beforeEach() || {}
       console.time(index)
-      repeat(benchmark.unitRepeat, () => func(sharedAll, sharedEach))
+      repeat(benchmark.unitRepeat, () => func(sharedEach, sharedAll))
       console.timeEnd(index)
     })
   })
 }
 
-const exampleBasicBenchmark = {
+const basicBenchmark = {
   name: 'Sum methods basic',
   iterations: 5,
   unitRepeat: 1,
@@ -41,37 +41,64 @@ const exampleBasicBenchmark = {
     }
   ]
 }
+runBenchmark(basicBenchmark)
 
-runBenchmark(exampleBasicBenchmark)
+const usingSharedVarsExampleBenchmark = {
+  name: 'Sum methods basic (using shared vars)',
+  iterations: 5,
+  unitRepeat: 1,
+  functions: [
+    (each) => {
+      for (var i = 0; i < 1000000; i++) {
+        each.subject.push(i)
+      }
+    },
+    (each) => {
+      Array(1000000).forEach(
+        (el, index) => each.subject.push(index)
+      )
+    },
+    (each) => {
+      each.subject = Array(1000000).fill(1).map(
+        (el, index) => index
+      )
+    }
+  ],
+  beforeEach: () => {
+    return {
+      subject: []
+    }
+  }
+}
+runBenchmark(usingSharedVarsExampleBenchmark)
 
-const exampleBenchmark = {
-  name: 'Sum methods',
+const globalIterationVarsExample = {
+  name: 'Another sum methods',
   iterations: 5,
   unitRepeat: 5000000,
   functions: [
-    (all, each) => {
+    (each, all) => {
       all.aGlobal = all.aGlobal + 1
     },
-    (all, each) => {
+    (each, all) => {
       all.aGlobal += 1
     },
-    (all, each) => {
+    (each, all) => {
       each.aPrivate = each.aPrivate + 1
     },
-    (all, each) => {
+    (each, all) => {
       each.aPrivate += 1
     }
   ],
-  beforeAll: () => {
-    return {
-      aGlobal: 1
-    }
-  },
   beforeEach: () => {
     return {
       aPrivate: 1
     }
+  },
+  beforeAll: () => {
+    return {
+      aGlobal: 1
+    }
   }
 }
-
-runBenchmark(exampleBenchmark)
+runBenchmark(globalIterationVarsExample)
