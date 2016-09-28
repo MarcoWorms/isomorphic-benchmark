@@ -10,9 +10,7 @@ const runBenchmark = (benchmark) => {
     console.log("----  " + benchmark.name + ": iteration " + iteration + "  ----")
     benchmark.functions.forEach((func, index) => {
       console.time(iteration + " " + index)
-      repeat(benchmark.unitRepeat, () => {
-          func()
-      })
+      repeat(benchmark.unitRepeat, func)
       console.timeEnd(iteration + " " + index)
     })
   })
@@ -23,11 +21,12 @@ const exampleBenchmark = {
   iterations: 10,
   unitRepeat: 1000000,
   functions: [
-    () => document.querySelectorAll("li")[0].attributes.test.value,
-    () =>  document.querySelectorAll("li")[0].getAttribute("test")
+    () => document.querySelectorAll("p")[0].attributes.test.value,
+    () =>  document.querySelectorAll("p")[0].getAttribute("test")
   ],
   before: () => {
-    document.querySelectorAll("li")[0].setAttribute("test", "blabla")
+    document.createElement('p')
+    document.querySelectorAll("p")[0].setAttribute("test", "blabla")
   }
 }
 
