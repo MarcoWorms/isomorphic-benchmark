@@ -19,68 +19,73 @@ const runBenchmark = (benchmark) => {
   })
 }
 
-const basicBenchmark = {
-  name: 'Sum methods basic',
-  iterations: 5,
-  unitRepeat: 1,
-  functions: [
-    () => {
-      const subject = []
-      for (var i = 0; i < 1000000; i++) {
-        subject.push(i)
-      }
-    },
-    () => {
-      const subject = []
-      makeArray(1000000).forEach(
-        (el, index) => subject.push(index)
-      )
-    },
-    () => {
-      const subject = makeArray(1000000).map(
-        (el, index) => index
-      )
-    }
-  ]
-}
-runBenchmark(basicBenchmark)
-
-
-
-const usingSharedVarsExampleBenchmark = {
-  name: 'Sum methods basic (using shared vars)',
-  iterations: 5,
-  unitRepeat: 1,
-  functions: [
-    (each) => {
-      for (var i = 0; i < each.subject.length; i++) {
-        each.subject[i] = i
-      }
-    },
-    (each) => {
-      each.subject.forEach(
-        (el, index) => each.subject[index] = index
-      )
-    },
-    (each) => {
-      each.subject = each.subject.map(
-        (el, index) => index
-      )
-    },
-    (each) => {
-      each.subject = each.subject.reduce(
-        (acc, el, index) => { acc[index] = index ; return acc },
-        []
-      )
-    }
-  ],
-  beforeEach: () => {
-    return {
-      subject: makeArray(1000000)
-    }
-  }
-}
-runBenchmark(usingSharedVarsExampleBenchmark)
+// const basicBenchmark = {
+//   name: 'Sum methods basic',
+//   iterations: 5,
+//   unitRepeat: 1,
+//   functions: [
+//     () => {
+//       const subject = []
+//       for (var i = 0; i < 1000000; i++) {
+//         subject.push(i)
+//       }
+//     },
+//     () => {
+//       const subject = []
+//       makeArray(1000000).forEach(
+//         (el, index) => subject.push(index)
+//       )
+//     },
+//     () => {
+//       const subject = makeArray(1000000).map(
+//         (el, index) => index
+//       )
+//     }
+//   ]
+// }
+// runBenchmark(basicBenchmark)
+//
+//
+//
+// const usingSharedVarsExampleBenchmark = {
+//   name: 'Fill array (using shared vars)',
+//   iterations: 5,
+//   unitRepeat: 1,
+//   functions: [
+//     (each) => {
+//       for (var i = 0; i < each.subject.length; i++) {
+//         each.subject[i] = i
+//       }
+//     },
+//     (each) => {
+//       each.subject.forEach(
+//         (el, index) => each.subject[index] = index
+//       )
+//     },
+//     (each) => {
+//       each.subject = each.subject.map(
+//         (el, index) => index
+//       )
+//     },
+//     (each) => {
+//       each.subject = _.map(each.subject,
+//         (el, index) => index
+//       )
+//     },
+//     (each) => {
+//       each.subject = each.subject.reduce(
+//         (acc, el, index) => { acc[index] = index ; return acc },
+//         []
+//       )
+//     }
+//   ],
+//   beforeEach: () => {
+//     return {
+//       subject: makeArray(1000000)
+//     }
+//   }
+// }
+// runBenchmark(usingSharedVarsExampleBenchmark)
 //
 //
 //
