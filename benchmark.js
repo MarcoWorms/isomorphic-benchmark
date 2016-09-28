@@ -32,17 +32,3 @@ const exampleBenchmark = {
 }
 
 runBenchmark(exampleBenchmark)
-
-
-
-
-
-
-
-
-//
-//
-//
-// getAttribute()
-// hasAttribute()
-// removeAttribute()
