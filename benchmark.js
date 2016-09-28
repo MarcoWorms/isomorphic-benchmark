@@ -1,7 +1,7 @@
 'use strict'
 
 const repeat = (n, func) =>
-  Array(n).fill(1).forEach((el, index) => func(index))
+  Array(n).forEach((el, index) => func(index))
 
 
 const runBenchmark = (benchmark) => {
