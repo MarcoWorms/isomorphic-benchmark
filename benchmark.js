@@ -5,7 +5,6 @@ const makeArray = length => Array.from({length})
 const repeat = (length, func) =>
   makeArray(length).forEach((el, index) => func(index))
 
-
 const runBenchmark = (benchmark) => {
   repeat(benchmark.iterations, (iteration) => {
     const sharedAll = benchmark.beforeAll && benchmark.beforeAll() || {}
@@ -64,11 +63,6 @@ const runBenchmark = (benchmark) => {
 //     },
 //     (each) => {
 //       each.subject = each.subject.map(
-//         (el, index) => index
-//       )
-//     },
-//     (each) => {
-//       each.subject = _.map(each.subject,
 //         (el, index) => index
 //       )
 //     },
