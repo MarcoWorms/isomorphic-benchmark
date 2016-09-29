@@ -1,116 +1,81 @@
 'use strict'
 
-const makeArray = length => Array.from({length})
+const makeArray = length =>
+  Array.from({length})
 
 const repeat = (length, func) =>
-  makeArray(length).forEach((el, index) => func(index))
+  makeArray(length)
+    .forEach((el, index) =>
+      func(index)
+    )
 
-const runBenchmark = (benchmark) => {
-  repeat(benchmark.iterations, (iteration) => {
-    const sharedAll = benchmark.beforeAll && benchmark.beforeAll() || {}
-    console.log("----  " + benchmark.name + ": iteration " + iteration + "  ----")
-    benchmark.functions.forEach((func, index) => {
-      const sharedEach = benchmark.beforeEach && benchmark.beforeEach() || {}
-      console.time(index)
-      repeat(benchmark.unitRepeat, () => func(sharedEach, sharedAll))
-      console.timeEnd(index)
-    })
-  })
+const runTest = (test, testDescription, testRepetitionAmount, persist) => {
+  var timerStart = performance.now();
+  repeat(testRepetitionAmount, () => test(persist))
+  var timerEnd = performance.now();
+  return (timerEnd - timerStart)
 }
 
-// const basicBenchmark = {
-//   name: 'Sum methods basic',
-//   iterations: 5,
-//   unitRepeat: 1,
-//   functions: [
-//     () => {
-//       const subject = []
-//       for (var i = 0; i < 1000000; i++) {
-//         subject.push(i)
-//       }
-//     },
-//     () => {
-//       const subject = []
-//       makeArray(1000000).forEach(
-//         (el, index) => subject.push(index)
-//       )
-//     },
-//     () => {
-//       const subject = makeArray(1000000).map(
-//         (el, index) => index
-//       )
-//     }
-//   ]
-// }
-// runBenchmark(basicBenchmark)
-//
-//
-//
-// const usingSharedVarsExampleBenchmark = {
-//   name: 'Fill array (using shared vars)',
-//   iterations: 5,
-//   unitRepeat: 1,
-//   functions: [
-//     (each) => {
-//       for (var i = 0; i < each.subject.length; i++) {
-//         each.subject[i] = i
-//       }
-//     },
-//     (each) => {
-//       each.subject.forEach(
-//         (el, index) => each.subject[index] = index
-//       )
-//     },
-//     (each) => {
-//       each.subject = each.subject.map(
-//         (el, index) => index
-//       )
-//     },
-//     (each) => {
-//       each.subject = each.subject.reduce(
-//         (acc, el, index) => { acc[index] = index ; return acc },
-//         []
-//       )
-//     }
-//   ],
-//   beforeEach: () => {
-//     return {
-//       subject: makeArray(1000000)
-//     }
-//   }
-// }
-// runBenchmark(usingSharedVarsExampleBenchmark)
-//
-//
-//
-//
-// const globalIterationVarsExample = {
-//   name: 'Another sum methods',
-//   iterations: 5,
-//   unitRepeat: 5000000,
-//   functions: [
-//     (each, all) => {
-//       all.aGlobal = all.aGlobal + 1
-//     },
-//     (each, all) => {
-//       all.aGlobal += 1
-//     },
-//     (each, all) => {
-//       each.aPrivate = each.aPrivate + 1
-//     },
-//     (each, all) => {
-//       each.aPrivate += 1
-//     }
-//   ],
-//   beforeEach: () => {
-//     return {
-//       aPrivate: 1
-//     }
-//   },
-//   beforeAll: () => {
-//     return {
-//       aGlobal: 1
-//     }
-//   }
-// }
-// runBenchmark(globalIterationVarsExample)
+const runBenchmark = (benchmark) => {
+  const results = []
+  repeat(benchmark.iterations, (iteration) => {
+    const persist = {}
+    persist.iteration = benchmark.persistIteration && benchmark.persistIteration() || {}
+    const testDescriptions = Object.keys(benchmark.tests)
+    const iterationResult = []
+    testDescriptions.forEach((testDescription, subjectIndex) => {
+      persist.test = benchmark.persistTest && benchmark.persistTest() || {}
+      const test = benchmark.tests[testDescription].test
+      const testRepetitionAmount = benchmark.tests[testDescription].repeat
+      iterationResult[subjectIndex] = {}
+      iterationResult[subjectIndex].description = testDescription
+      iterationResult[subjectIndex].result = runTest(test, testDescription, testRepetitionAmount, persist)
+      iterationResult[subjectIndex].timesRepeated = testRepetitionAmount
+    })
+    results.push(iterationResult)
+  })
+  return results
+}
+
+const aBenchmark = {
+  name: 'Another sum methods',
+  iterations: 5,
+  tests: {
+    'add 1 to a iteration var without sugar sintax': {
+      repeat: 500000,
+      test: (persist) => {
+        persist.iteration.foo = persist.iteration.foo + 1
+      }
+    },
+    'add 1 to a iteration var with sugar sintax':{
+      repeat: 500000,
+      test: (persist) => {
+        persist.iteration.foo += 1
+      }
+    },
+    'add 1 to a test var without sugar sintax':{
+      repeat: 500000,
+      test: (persist) => {
+        persist.test.bar = persist.test.bar + 1
+      }
+    },
+    'add 1 to a test var with sugar sintax':{
+      repeat: 500000,
+      test: (persist) => {
+        persist.test.bar += 1
+      }
+    }
+  },
+  persistTest: () => {
+    return {
+      foo: 0
+    }
+  },
+  persistIteration: () => {
+    return {
+      bar: 0
+    }
+  }
+}
+const benchmarkResults = runBenchmark(aBenchmark)
+console.dir(benchmarkResults)
