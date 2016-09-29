@@ -17,7 +17,10 @@ const runTest = (test, persist) => {
 }
 
 const runBenchmark = (benchmark) => {
-  const results = []
+  const results = {
+    description: benchmark.description,
+    iterations: []
+  }
   repeat(benchmark.iterations, (iteration) => {
     const persist = {}
     const iterationResult = []
@@ -30,13 +33,13 @@ const runBenchmark = (benchmark) => {
         })
       )
     })
-    results[iteration] = iterationResult
+    results.iterations[iteration] = iterationResult
   })
   return results
 }
 
 const aBenchmark = {
-  name: 'Another sum methods',
+  description: 'benchmark different ways to sum in different scopes',
   iterations: 5,
   tests: [
     {
