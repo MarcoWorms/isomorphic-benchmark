@@ -9,9 +9,9 @@ const repeat = (length, func) =>
       func(index)
     )
 
-const runTest = (test, testDescription, testRepetitionAmount, persist) => {
+const runTest = (test, persist) => {
   var timerStart = performance.now();
-  repeat(testRepetitionAmount, () => test(persist))
+  repeat(test.amount, () => test.testFunc(persist))
   var timerEnd = performance.now();
   return (timerEnd - timerStart)
 }
@@ -21,18 +21,14 @@ const runBenchmark = (benchmark) => {
   repeat(benchmark.iterations, (iteration) => {
     const persist = {}
     persist.iteration = benchmark.persistIteration && benchmark.persistIteration() || {}
-    const testDescriptions = Object.keys(benchmark.tests)
-    const iterationResult = []
-    testDescriptions.forEach((testDescription, subjectIndex) => {
+    benchmark.tests.forEach((test, subjectIndex) => {
       persist.test = benchmark.persistTest && benchmark.persistTest() || {}
-      const test = benchmark.tests[testDescription].test
-      const testRepetitionAmount = benchmark.tests[testDescription].repeat
-      iterationResult[subjectIndex] = {}
-      iterationResult[subjectIndex].description = testDescription
-      iterationResult[subjectIndex].result = runTest(test, testDescription, testRepetitionAmount, persist)
-      iterationResult[subjectIndex].timesRepeated = testRepetitionAmount
+      const iterationResult =
+        Object.assign(test, {
+          result: runTest(test, persist)
+        })
+      results[subjectIndex] = iterationResult
     })
-    results.push(iterationResult)
   })
   return results
 }
@@ -40,32 +36,36 @@ const runBenchmark = (benchmark) => {
 const aBenchmark = {
   name: 'Another sum methods',
   iterations: 5,
-  tests: {
-    'add 1 to a iteration var without sugar sintax': {
-      repeat: 500000,
-      test: (persist) => {
+  tests: [
+    {
+      description: 'add 1 to a iteration var without sugar sintax',
+      amount: 500000,
+      testFunc: (persist) => {
         persist.iteration.foo = persist.iteration.foo + 1
       }
     },
-    'add 1 to a iteration var with sugar sintax':{
-      repeat: 500000,
-      test: (persist) => {
+    {
+      description: 'add 1 to a iteration var with sugar sintax',
+      amount: 500000,
+      testFunc: (persist) => {
         persist.iteration.foo += 1
       }
     },
-    'add 1 to a test var without sugar sintax':{
-      repeat: 500000,
-      test: (persist) => {
+    {
+      description: 'add 1 to a test var without sugar sintax',
+      amount: 500000,
+      testFunc: (persist) => {
         persist.test.bar = persist.test.bar + 1
       }
     },
-    'add 1 to a test var with sugar sintax':{
-      repeat: 500000,
-      test: (persist) => {
+    {
+      description: 'add 1 to a test var with sugar sintax',
+      amount: 500000,
+      testFunc: (persist) => {
         persist.test.bar += 1
       }
     }
-  },
+  ],
   persistTest: () => {
     return {
       foo: 0
