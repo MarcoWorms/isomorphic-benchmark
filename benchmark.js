@@ -20,15 +20,17 @@ const runBenchmark = (benchmark) => {
   const results = []
   repeat(benchmark.iterations, (iteration) => {
     const persist = {}
+    const iterationResult = []
     persist.iteration = benchmark.persistIteration && benchmark.persistIteration() || {}
     benchmark.tests.forEach((test, subjectIndex) => {
       persist.test = benchmark.persistTest && benchmark.persistTest() || {}
-      const iterationResult =
+      iterationResult.push(
         Object.assign(test, {
           result: runTest(test, persist)
         })
-      results[subjectIndex] = iterationResult
+      )
     })
+    results[iteration] = iterationResult
   })
   return results
 }
@@ -78,4 +80,4 @@ const aBenchmark = {
   }
 }
 const benchmarkResults = runBenchmark(aBenchmark)
-console.dir(benchmarkResults)
+console.log(benchmarkResults)
