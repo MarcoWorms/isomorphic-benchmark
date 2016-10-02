@@ -1,3 +1,4 @@
+*chrome implementation still on the way*
 
 `npm install benchmarker --save` * not working yet
 
