@@ -1,13 +1,17 @@
 {
-  "name": "js-benchmarker",
+  "name": "isomorphic-benchmark",
   "version": "1.0.0",
-  "description": "",
+  "description": "Benchmark stuff in javascript either in chrome or node",
   "main": "index.js",
   "scripts": {
     "test": "jasmine"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Marco Guaspari Worms",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MarcoWorms/isomorphic-benchmark"
+  },
   "devDependencies": {
     "jasmine": "^2.5.2"
   }
