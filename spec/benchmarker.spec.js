@@ -35,7 +35,7 @@ describe('Benchmarker', () => {
     const iterationAmount = 20
 
     const aBenchmark = {
-      description: 'empty element inner HTML',
+      description: 'sum',
       iterations: iterationAmount,
       tests: [
         {
