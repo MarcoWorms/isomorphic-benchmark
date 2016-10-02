@@ -1,9 +1,9 @@
 *chrome implementation still on the way*
 
-`npm install isomorphic-benchmarker --save`
+`npm install isomorphic-benchmark --save`
 
 ```javascript
-runBenchmark = require('benchmarker')
+runBenchmark = require('isomorphic-benchmark')
 const aBenchmark = {
   description: 'sum',
   iterations: iterationAmount,
