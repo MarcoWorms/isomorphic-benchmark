@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-benchmark",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Benchmark stuff in javascript either in chrome or node",
   "main": "index.js",
   "scripts": {
