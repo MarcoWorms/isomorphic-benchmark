@@ -1,6 +1,6 @@
 *chrome implementation still on the way*
 
-`npm install benchmarker --save` * not working yet
+`npm install isomorphic-benchmarker --save`
 
 ```javascript
 runBenchmark = require('benchmarker')
