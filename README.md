@@ -1,5 +1,5 @@
 
-`npm install benchmarker` * not working yet
+`npm install benchmarker --save` * not working yet
 
 ```javascript
 runBenchmark = require('benchmarker')
