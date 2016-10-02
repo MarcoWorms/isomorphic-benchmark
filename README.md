@@ -1,4 +1,4 @@
-*chrome implementation is being worked on branch 'chrome-implementation'*
+*chrome implementation is being worked at the branch 'chrome-implementation'*
 
 `npm install isomorphic-benchmark --save`
 
