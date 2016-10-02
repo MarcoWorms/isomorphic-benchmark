@@ -2,7 +2,7 @@ const runBenchmark = require('./index')
 
 const aBenchmark = {
   description: 'sum',
-  iterations: iterationAmount,
+  iterations: 20,
   tests: [
     {
       description: 'sugar',

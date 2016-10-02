@@ -22,7 +22,7 @@ const doTest = (test, persist, beforeEachTestFunc) => {
     amount: test.amount,
     result: `Benchmark took ${resultNanoseconds} nanoseconds`,
     resultSeconds: `Benchmark took ${resultNanoseconds / 1000000000} seconds`,
-    rawResult: resultNanoseconds
+    rawResult: resultNanoseconds,
     rawResult: diff
   }
 }
