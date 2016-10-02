@@ -1,4 +1,3 @@
-
 const aBenchmark = {
   description: 'empty element inner HTML',
   iterations: 20,
