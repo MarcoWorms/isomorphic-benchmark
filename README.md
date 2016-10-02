@@ -14,7 +14,7 @@ const aBenchmark = {
   {
     description: 'sugar',
     amount: 100000,
-    testFunc: (persist) => {
+    testFunc: () => {
       var a
       a += 1
     }
@@ -22,7 +22,7 @@ const aBenchmark = {
   {
     description: 'nosugar',
     amount: 100000,
-    testFunc: (persist) => {
+    testFunc: () => {
       var a
       a = a + 1
     }
