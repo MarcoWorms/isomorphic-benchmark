@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/MarcoWorms/isomorphic-benchmark.svg?branch=master)](https://travis-ci.org/MarcoWorms/isomorphic-benchmark)
 
-*chrome implementation is being worked on at the branch 'chrome-implementation'*
-
 `npm install isomorphic-benchmark --save`
 
 ```javascript
