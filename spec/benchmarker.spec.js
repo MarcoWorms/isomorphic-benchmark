@@ -33,7 +33,6 @@ describe('Repeat', () => {
 describe('Benchmarker', () => {
   it('should output results', () => {
     const iterationAmount = 20
-
     const aBenchmark = {
       description: 'sum',
       iterations: iterationAmount,
@@ -42,19 +41,33 @@ describe('Benchmarker', () => {
           description: 'sugar',
           amount: 100000,
           testFunc: (persist) => {
-            var a
-            a += 1
+            persist.test.foo += 1
+            persist.iteration.bar += 1
           }
         },
         {
           description: 'nosugar',
           amount: 100000,
           testFunc: (persist) => {
-            var a
-            a = a + 1
+            persist.test.foo = persist.test.foo + 1
+            persist.iteration.bar = persist.iteration.bar + 1
           }
         },
-      ]
+      ],
+      beforeEachTestFunc: (persist) => {
+        // you can add stuff to persist other than test or iteration that will persist the whole benchmark.
+        persist.myVar = 1
+      },
+      persistTest: () => {
+        return {
+          foo: 0
+        }
+      },
+      persistIteration: () => {
+        return {
+          bar: 0
+        }
+      }
     }
     const results = runBenchmark(aBenchmark)
     expect(results).toBeDefined()

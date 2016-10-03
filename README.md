@@ -2,9 +2,18 @@
 
 `npm install isomorphic-benchmark --save`
 
+Node
 ```javascript
 const runBenchmark = require('isomorphic-benchmark')
+```
 
+Browser (adds a global "runBenchmark")
+```javascript
+<script src="./dist/benchmark.js"></script>
+```
+
+Example test
+```javascript
 const aBenchmark = {
   description: 'sum',
   iterations: 10,
@@ -29,7 +38,7 @@ const aBenchmark = {
 }
 ```
 
-Example result in node:
+Example result handling in node:
 ```javascript
 const results = runBenchmark(aBenchmark)
 
@@ -45,8 +54,48 @@ fs.writeFile(outputFilename, JSON.stringify(results, null, 4), function(err) {
 });
 ```
 
-Example result in browser:
+Example result handling in browser:
 ```javascript
 const results = runBenchmark(aBenchmark)
 console.log(JSON.stringify(results, null, 4))
+```
+
+Full example:
+```javascript
+const aBenchmark = {
+  description: 'sum',
+  iterations: iterationAmount,
+  tests: [
+    {
+      description: 'sugar',
+      amount: 100000,
+      testFunc: (persist) => {
+        persist.test.foo += 1
+        persist.iteration.bar += 1
+      }
+    },
+    {
+      description: 'nosugar',
+      amount: 100000,
+      testFunc: (persist) => {
+        persist.test.foo = persist.test.foo + 1
+        persist.iteration.bar = persist.iteration.bar + 1
+      }
+    },
+  ],
+  beforeEachTestFunc: (persist) => {
+    // you can add stuff to persist other than test or iteration that will persist the whole benchmark.
+    persist.myVar = 1
+  },
+  persistTest: () => {
+    return {
+      foo: 0
+    }
+  },
+  persistIteration: () => {
+    return {
+      bar: 0
+    }
+  }
+}
 ```
