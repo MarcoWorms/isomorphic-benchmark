@@ -1,5 +1,7 @@
 'use strict'
 
+const isOnBrowser = this.performance && true || false
+
 const makeArray = length =>
   Array.from({length})
 
@@ -11,6 +13,22 @@ const repeat = (amount, func) =>
 
 const doTest = (test, persist, beforeEachTestFunc) => {
   beforeEachTestFunc && beforeEachTestFunc(persist)
+
+  if (isOnBrowser) {
+    const start = performance.now();
+    repeat(test.amount, () =>
+      test.testFunc(persist)
+    )
+    const end =  performance.now();
+    const resultMiliseconds = (end - start)
+    return {
+      description: test.description,
+      amount: test.amount,
+      result: `${resultMiliseconds} ms`,
+      rawResult: (end - start)
+    }
+  }
+
   const hrtime = process.hrtime();
   repeat(test.amount, () =>
     test.testFunc(persist)
@@ -20,9 +38,9 @@ const doTest = (test, persist, beforeEachTestFunc) => {
   return {
     description: test.description,
     amount: test.amount,
-    result: `Benchmark took ${resultNanoseconds} nanoseconds`,
-    resultSeconds: `Benchmark took ${resultNanoseconds / 1000000000} seconds`,
-    rawResult: resultNanoseconds,
+    result: `${resultNanoseconds} nanoseconds`,
+    resultSeconds: resultNanoseconds / 1000000000,
+    resultNanoseconds: resultNanoseconds,
     rawResult: diff
   }
 }
