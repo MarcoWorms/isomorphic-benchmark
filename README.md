@@ -11,24 +11,28 @@ const aBenchmark = {
   description: 'sum',
   iterations: 10,
   tests: [
-  {
-    description: 'sugar',
-    amount: 100000,
-    testFunc: () => {
-      var a
-      a += 1
-    }
-  },
-  {
-    description: 'nosugar',
-    amount: 100000,
-    testFunc: () => {
-      var a
-      a = a + 1
-    }
-  },
+    {
+      description: 'sugar',
+      amount: 100000,
+      testFunc: () => {
+        var a
+        a += 1
+      }
+    },
+    {
+      description: 'nosugar',
+      amount: 100000,
+      testFunc: () => {
+        var a
+        a = a + 1
+      }
+    },
   ]
 }
+```
+
+Example result on node:
+```javascript
 const results = runBenchmark(aBenchmark)
 
 var fs = require('fs');
@@ -41,4 +45,10 @@ fs.writeFile(outputFilename, JSON.stringify(results, null, 4), function(err) {
     console.log("JSON saved to " + outputFilename);
   }
 });
+```
+
+Example result on chrome:
+```javascript
+const results = runBenchmark(aBenchmark)
+console.log(JSON.stringify(results, null, 4))
 ```
