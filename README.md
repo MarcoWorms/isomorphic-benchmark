@@ -29,7 +29,7 @@ const aBenchmark = {
 }
 ```
 
-Example result on node:
+Example result in node:
 ```javascript
 const results = runBenchmark(aBenchmark)
 
@@ -45,7 +45,7 @@ fs.writeFile(outputFilename, JSON.stringify(results, null, 4), function(err) {
 });
 ```
 
-Example result on chrome:
+Example result in browser:
 ```javascript
 const results = runBenchmark(aBenchmark)
 console.log(JSON.stringify(results, null, 4))
