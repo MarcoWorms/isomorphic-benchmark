@@ -60,6 +60,12 @@ const results = runBenchmark(aBenchmark)
 console.log(JSON.stringify(results, null, 4))
 ```
 
+or displayed as tabular data using [console.table](https://developer.mozilla.org/en-US/docs/Web/API/Console/table)
+```javascript
+const results = runBenchmark(aBenchmark);
+results.iterations.forEach(console.table)
+```
+
 Full example:
 ```javascript
 const aBenchmark = {
