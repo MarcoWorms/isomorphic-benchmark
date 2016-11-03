@@ -63,7 +63,7 @@ const makeInitResults = (description) => {
   }
 }
 
-const run = (benchmark) => {
+const runBenchmark = (benchmark) => {
   const iterationsAmount = benchmark.iterations || 1
   const results = makeInitResults(benchmark.description)
   const iterationResults = results.iterations
@@ -71,10 +71,6 @@ const run = (benchmark) => {
     iterationResults.push( doIteration(benchmark) )
   })
   return results
-}
-
-const runBenchmark = (benchmark) => {
-  return run(benchmark)
 }
 
 module.exports = {makeArray, repeat, doTest, runBenchmark}
